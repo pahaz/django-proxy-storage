@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.utils import importlib
 from django.conf import settings
 
-from proxy_storage.compat import six
+from proxy_storage.compat import six, importlib
 
 
 USER_SETTINGS = getattr(settings, 'PROXY_STORAGE', None)
