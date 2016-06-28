@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
 from proxy_storage.meta_backends.base import MetaBackendBase, MetaBackendObjectDoesNotExist
@@ -33,6 +36,7 @@ class ORMMetaBackend(MetaBackendBase):
         return self.model.objects.filter(path=path).exists()
 
 
+@python_2_unicode_compatible
 class ProxyStorageModelBase(models.Model):
     path = models.CharField(max_length=255, unique=True)
     proxy_storage_name = models.CharField(max_length=50)
@@ -45,7 +49,7 @@ class ProxyStorageModelBase(models.Model):
         # todo: test me
         return ORMMetaBackend(model=type(self)).get_meta_backend_obj(self)
 
-    def __unicode__(self):
+    def __str__(self):
         meta_backend_obj = self.get_meta_backend_obj()
         proxy_storage = meta_backend_obj.get_proxy_storage()
         original_storage = meta_backend_obj.get_original_storage()
