@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
+from os.path import normpath
 
+from django.utils._os import safe_join  # noqa
 from django.utils.encoding import force_text
 from django.core.files.storage import Storage
 
@@ -55,7 +57,7 @@ class ProxyStorageBase(Storage):
         }
 
     def get_original_storage_full_path(self, path, meta_backend_obj=None):
-        return path
+        return safe_join('/', normpath(path)).lstrip('/')
 
     def delete(self, name):
         try:
