@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
 
 
 def clean_path(path):
-    return '/{0}'.format(path.strip('/'))
+    return os.path.normpath(os.path.join('/', path))
