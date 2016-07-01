@@ -4,7 +4,6 @@ from collections import OrderedDict
 from django.utils.encoding import force_text
 from django.core.files.storage import Storage
 
-from proxy_storage import utils
 from proxy_storage.meta_backends.base import MetaBackendObjectDoesNotExist
 
 
@@ -36,11 +35,8 @@ class ProxyStorageBase(Storage):
             original_storage_path = self.get_original_storage().save(name, content)
 
         # Get the proper name for the file, as it will actually be saved to meta backend
-        name = self.get_available_name(
-            utils.clean_path(  # todo: test utils.clean_path usage
-                self.get_original_storage_full_path(original_storage_path)
-            )
-        )
+        full_path = self.get_original_storage_full_path(original_storage_path)
+        name = self.get_available_name(full_path)
 
         # create meta backend info
         self.meta_backend.create(data=self.get_data_for_meta_backend_save(
@@ -59,11 +55,7 @@ class ProxyStorageBase(Storage):
         }
 
     def get_original_storage_full_path(self, path, meta_backend_obj=None):
-        # todo: test me
-        try:
-            return self.get_original_storage(meta_backend_obj=meta_backend_obj).path(path)
-        except NotImplementedError:
-            return path
+        return path
 
     def delete(self, name):
         try:
